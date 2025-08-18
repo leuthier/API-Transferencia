@@ -6,7 +6,7 @@ const userService = require('../services/userService');
  * @swagger
  * /users:
  *   post:
- *     summary: Registra um novo usuário
+ *     summary: Registrar um novo usuário
  *     requestBody:
  *       required: true
  *       content:
@@ -41,7 +41,7 @@ router.post('/', (req, res) => {
  * @swagger
  * /users:
  *   get:
- *     summary: Lista usuários
+ *     summary: Listar usuários
  *     responses:
  *       200:
  *         description: Lista de usuários

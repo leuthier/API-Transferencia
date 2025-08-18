@@ -6,7 +6,7 @@ const userService = require('../services/userService');
  * @swagger
  * /transfers:
  *   post:
- *     summary: Realiza transferência entre usuários
+ *     summary: Realizar transferência entre usuários
  *     requestBody:
  *       required: true
  *       content:
