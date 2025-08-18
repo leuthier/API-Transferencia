@@ -1,6 +1,5 @@
 const userModel = require('../models/userModel');
 const { v4: uuidv4 } = require('uuid');
-const transferService = require('./transferService');
 
 function registerUser({ name, email, password, favored = false, balance = 0 }){
   if(!name || !email || !password) throw {

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const userService = require('../services/userService');
+const transferService = require('../services/transferService');
 
 /**
  * @swagger
@@ -26,10 +26,12 @@ const userService = require('../services/userService');
  */
 router.post('/', (req, res) => {
   try{
-    const result = userService.transfer(req.body);
+    const result = transferService.transfer(req.body);
     res.json(result);
   } catch(err){
-    res.status(err.status || 500).json({ message: err.message || 'erro interno' });
+    res.status(err.status || 500).json({
+      message: err.message || 'erro interno'
+    });
   }
 });
 
