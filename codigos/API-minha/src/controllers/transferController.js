@@ -35,4 +35,17 @@ router.post('/', (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /transfers:
+ *   get:
+ *     summary: Listar transferências
+ *     responses:
+ *       200:
+ *         description: Listar transferências
+ */
+router.get('/', (req, res) => {
+  res.json(transferService.listTransfers());
+});
+
 module.exports = router;

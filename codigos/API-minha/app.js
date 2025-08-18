@@ -9,12 +9,12 @@ const transferRouter = require('./src/controllers/transferController');
 const swaggerDefinition = {
   openapi: '3.0.0',
   info: {
-    title: 'API Testes - Express',
+    title: 'API - Minha',
     version: '1.0.0',
-    description: 'API para aprendizado de testes e automação'
+    description: 'API para aprendizado de testes e automação - PGATS 2025'
   },
   servers: [
-    { url: 'http://localhost:3000', description: 'Local server' }
+    { url: 'http://localhost:3000', description: 'by Leut' }
   ]
 };
 
