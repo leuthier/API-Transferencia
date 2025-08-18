@@ -142,9 +142,3 @@ dist
 .svelte-kit
 
 # End of https://www.toptal.com/developers/gitignore/api/node
-
-../.github/
-../.vscode/
-../AutomacaodeTestesdeAPIv20.pdf
-../Capturar.PNG
-../Gravacao/
