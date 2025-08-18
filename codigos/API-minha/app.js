@@ -6,9 +6,6 @@ const usersRouter = require('./src/controllers/usersController');
 const authRouter = require('./src/controllers/authController');
 const transferRouter = require('./src/controllers/transferController');
 
-const app = express();
-app.use(express.json());
-
 const swaggerDefinition = {
   openapi: '3.0.0',
   info: {
@@ -26,16 +23,17 @@ const options = {
   apis: [path.join(__dirname, 'src', 'controllers', '*.js')]
 };
 
+const app = express();
+app.use(express.json());
+
 const swaggerSpec = swaggerJsdoc(options);
 // endpoint para inspecionar o swagger.json
 app.get('/swagger.json', (req, res) => res.json(swaggerSpec));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+// rotas
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
 app.use('/transfers', transferRouter);
-
-// health
-app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
 module.exports = app;

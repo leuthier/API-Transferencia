@@ -1,5 +1,5 @@
 // Banco de dados em memória
-const users = [];
+const users = [{"email":"victor@leuthier.com", "password":"1234"}];
 
 module.exports = {
   getAll: () => users,
