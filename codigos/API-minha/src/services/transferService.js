@@ -6,30 +6,16 @@ function transfer({ fromId, toId, amount }){
   const from = userModel.findById(fromId);
   const to = userModel.findById(toId);
 
-  if(!from) throw {
-    status: 404, message: 'Remetente não encontrado'
-  };
+  if(!from || !to) throw new Error('Usuário remetente ou destinatário não encontrado');
+  
+  if(amount <= 0) throw new Error("Valor deve ser maior que zero");
 
-  if(!to) throw {
-    status: 404, message: 'Destinatário não encontrado'
-  };
-
-  if(amount <= 0) throw {
-    status: 400, message: 'Valor deve ser maior que zero'
-  };
-
-  if(from.id === to.id) throw {
-    status: 400, message: 'Não é possível transferir para si mesmo'
-  };
-
+  if(from.id === to.id) throw new Error("Não é possível transferir para si mesmo");
+  
   // regra: transferências para destinatários não favorecidos somente se amount < 5000
-  if(!to.favored && amount >= 5000) throw {
-    status: 400, message: 'Transferências para destinatários não favorecidos devem ser menores que R$ 5.000,00'
-  };
+  if(!to.favored && amount >= 5000) throw new Error("Transferência acima de R$ 5.000,00 só para favorecidos");
 
-  if(from.balance < amount) throw {
-    status: 400, message: 'Saldo insuficiente'
-  };
+  if(from.balance < amount) throw new Error("Saldo insuficiente");
 
   from.balance -= amount;
   to.balance += amount;
