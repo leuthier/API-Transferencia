@@ -10,7 +10,7 @@ const swaggerDefinition = {
   openapi: '3.0.0',
   info: {
     title: 'API - Minha',
-    version: '1.0.0',
+    version: '1.0.1',
     description: 'API para aprendizado de testes e automação - PGATS 2025'
   },
   servers: [
