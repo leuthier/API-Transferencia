@@ -23,7 +23,11 @@ const userService = require('../services/userService');
  *         description: Token de autenticação
  */
 router.post('/login', (req, res) => {
+  const { email, password } = req.body;
   try{
+    if(!email || !password){
+      return res.status(400).json({ error: 'Email e senha são obrigatórios' });
+    }
     const token = userService.authenticate(req.body);
     res.json(token);
   } catch(err){

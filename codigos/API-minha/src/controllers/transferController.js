@@ -1,7 +1,24 @@
-const express = require('express');
-const router = express.Router();
-const transferService = require('../services/transferService');
-
+/**
+ * @swagger
+ * /transfers:
+ *   get:
+ *     summary: Listar transferências
+ *     responses:
+ *       200:
+ *         description: Lista de transferências
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id: { type: string }
+ *                   fromId: { type: string }
+ *                   toId: { type: string }
+ *                   amount: { type: number }
+ *                   createdAt: { type: string, format: date-time }
+ */
 /**
  * @swagger
  * /transfers:
@@ -16,34 +33,76 @@ const transferService = require('../services/transferService');
  *             properties:
  *               fromId:
  *                 type: string
+ *                 example: "user1"
  *               toId:
  *                 type: string
+ *                 example: "user2"
  *               amount:
  *                 type: number
+ *                 example: 100
  *     responses:
- *       200:
- *         description: Transferência realizada
+ *       201:
+ *         description: Transferência realizada com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 from:
+ *                   type: object
+ *                   properties:
+ *                     id: { type: string }
+ *                     balance: { type: number }
+ *                 to:
+ *                   type: object
+ *                   properties:
+ *                     id: { type: string }
+ *                     balance: { type: number }
+ *                 transfer:
+ *                   type: object
+ *                   properties:
+ *                     id: { type: string }
+ *                     fromId: { type: string }
+ *                     toId: { type: string }
+ *                     amount: { type: number }
+ *                     createdAt: { type: string, format: date-time }
+ *       400:
+ *         description: Erro de validação ou negócio
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
  */
+const express = require('express');
+const router = express.Router();
+const transferService = require('../services/transferService');
+
+
 router.post('/', (req, res) => {
+  const {fromId, toId, amount} = req.body;
+  if(!fromId || !toId) {
+    return res.status(400).json({ error: 'Usuário remetente ou destinatário não foram encontrados'});
+  }
+  if (fromId === toId) {
+    return res.status(400).json({ error: 'Não é possível transferir para si mesmo'});
+  }
+  if (typeof amount !== 'number') {
+    return res.status(400).json({ error: 'O valor deve ser numérico'});
+  }
+  if (amount <= 0) {
+    return res.status(400).json({ error: 'O valor deve ser maior que zero'});
+  }
   try{
-    const result = transferService.transfer(req.body);
-    res.json(result);
+    const transfer = transferService.transfer(req.body);
+    res.status(201).json(transfer);
   } catch(err){
-    res.status(err.status || 500).json({
-      message: err.message || 'erro interno'
-    });
+    res.status(400).json({error: err.message});
   }
 });
 
-/**
- * @swagger
- * /transfers:
- *   get:
- *     summary: Listar transferências
- *     responses:
- *       200:
- *         description: Listar transferências
- */
 router.get('/', (req, res) => {
   res.json(transferService.listTransfers());
 });
