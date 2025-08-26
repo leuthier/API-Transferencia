@@ -1,12 +1,13 @@
 // Bibliotecas
 const request = require('supertest');
 const { expect } = require('chai');
+const API = 'http://localhost:3000';
 
 // Testes
-describe('Transfer Controller - External', () => {
+describe('Transfer - External', () => {
     describe('POST /transfers', () => {
         it('Quando informo remetente e destinatario inexistentes recebo 400', async () => {
-            const resposta = await request('http://localhost:3000')
+            const resposta = await request(API)
                 .post('/transfers')
                 .send({
                     fromId: "1",
@@ -14,13 +15,13 @@ describe('Transfer Controller - External', () => {
                     amount: 100
                 });
             expect(resposta.status).to.equal(400);
-            expect(resposta.body).to.have.property('error', 'Usuário remetente ou destinatário não encontrado');
+            expect(resposta.body.error).to.equal('Usuário remetente ou destinatário não encontrado');
         });
     });
 
     describe('POST /transfers', () => {
         it('Quando informo mesmo id remetente e destinatario recebo ', async () => {
-            const resposta = await request('http://localhost:3000')
+            const resposta = await request(API)
                 .post('/transfers')
                 .send({
                     fromId: "eb2d3111-4f9b-4bbe-88ec-89c623c49a46",
