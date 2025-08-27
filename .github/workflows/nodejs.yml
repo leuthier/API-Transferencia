@@ -23,7 +23,7 @@ jobs:
       run: npm install
 
     - name: Run mock tests
-      run: npm run test-controllers
+      run: npm run test-controller
     - name: Start server
       run: npm start &
 
