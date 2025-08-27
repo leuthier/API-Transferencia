@@ -60,6 +60,7 @@ describe('Transfer Controller - Mock', () => {
             expect(resposta.body).to.have.property('transfer');
             expect(resposta.body.transfer).to.have.property('id', 'fake-transfer-id');
             expect(resposta.body.transfer).to.have.property('amount', 100);
+            expect(resposta.body.transfer).to.have.property('createdAt', '2025-08-25T01:41:19.859Z');
         });
 
         it('Quando informo mesmo id remetente e destinatario recebo 400', async () => {

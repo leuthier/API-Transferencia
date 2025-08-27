@@ -43,6 +43,7 @@ describe('Transfer - External', () => {
             expect(resposta.body).to.have.property('transfer');
             expect(resposta.body.transfer).to.have.property('id');
             expect(resposta.body.transfer).to.have.property('amount', 100);
+            expect(resposta.body.transfer).to.have.property('createdAt');
         });
 
         it('Quando informo valor negativo para transferir recebo 400', async () => {
