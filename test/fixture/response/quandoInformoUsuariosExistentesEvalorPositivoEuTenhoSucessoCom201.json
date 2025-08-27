@@ -1,0 +1,16 @@
+{
+  "from": {
+    "id": "victor",
+    "balance": 900 },
+  "to": {
+    "id": "leut",
+    "balance": 1100
+  },
+  "transfer": {
+    "id": "fake-transfer-id",
+    "fromId": "victor",
+    "toId": "leut",
+    "amount": 100,
+    "createdAt": "2025-08-27T01:41:19.859Z"
+  }
+}
