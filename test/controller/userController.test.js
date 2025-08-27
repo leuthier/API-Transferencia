@@ -1,0 +1,47 @@
+const request = require('supertest');
+const sinon = require('sinon');
+const { expect } = require('chai');
+
+const app = require('../../app');
+
+describe('User Controller - Mock', () => {
+    afterEach(() => {
+        sinon.restore();
+    });
+
+    describe('GET /users', () => {
+        it('Deve retornar lista de usuários', async () => {
+            const userService = require('../../src/services/userService');
+            const mockUsers = [
+                { id: 'u1', name: 'Alice', email: 'alice@email.com', favored: true, balance: 1000 },
+                { id: 'u2', name: 'Bob', email: 'bob@email.com', favored: false, balance: 500 }
+            ];
+            sinon.stub(userService, 'listUsers').returns(mockUsers);
+            const resposta = await request(app).get('/users');
+            expect(resposta.status).to.equal(200);
+            expect(resposta.body).to.be.an('array').with.lengthOf(2);
+            expect(resposta.body[0]).to.have.property('name', 'Alice');
+            expect(resposta.body[1]).to.have.property('name', 'Bob');
+        });
+    });
+
+    describe('POST /users', () => {
+        it('Quando informo email já cadastrado recebo 400', async () => {
+            const userService = require('../../src/services/userService');
+            sinon.stub(userService, 'userExists').returns(true);
+
+            const resposta = await request(app)
+                .post('/users')
+                .send({
+                    name: "victor name",
+                    email: "victor@email.com",
+                    password: "1234",
+                    favored: true,
+                    balance: 100
+                });
+            expect(resposta.status).to.equal(400);
+            expect(resposta.body.error).to.equal('Email já cadastrado');    
+        });
+    });
+
+});
