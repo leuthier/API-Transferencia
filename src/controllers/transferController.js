@@ -3,6 +3,8 @@
  * /transfers:
  *   get:
  *     summary: Listar transferências
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Lista de transferências
@@ -24,6 +26,8 @@
  * /transfers:
  *   post:
  *     summary: Realizar transferência entre usuários
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -79,9 +83,10 @@
 const express = require('express');
 const router = express.Router();
 const transferService = require('../services/transferService');
+const authenticateToken = require('../middleware/authenticateToken');
 
 
-router.post('/', (req, res) => {
+router.post('/', authenticateToken, (req, res) => {
   const {fromId, toId, amount} = req.body;
   if(!fromId || !toId) {
     return res.status(400).json({ error: 'Usuário remetente ou destinatário não foram encontrados'});
@@ -103,7 +108,7 @@ router.post('/', (req, res) => {
   }
 });
 
-router.get('/', (req, res) => {
+router.get('/', authenticateToken, (req, res) => {
   res.json(transferService.listTransfers());
 });
 

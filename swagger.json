@@ -41,7 +41,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "username": { "type": "string" },
+                  "email": { "type": "string" },
                   "password": { "type": "string" }
                 },
                 "required": ["username", "password"]
@@ -68,6 +68,7 @@
     },
     "/transfers": {
       "post": {
+        "security": [{ "bearerAuth": [] }],
         "summary": "Realizar transferência entre usuários",
         "requestBody": {
           "required": true,
@@ -134,10 +135,12 @@
                 }
               }
             }
-          }
+          },
+          "401": { "description": "Token não fornecido ou inválido." } 
         }
       },
       "get": {
+        "security": [{ "bearerAuth": [] }],
         "summary": "Listar transferências",
         "responses": {
           "200": {
@@ -159,7 +162,8 @@
                 }
               }
             }
-          }
+          },
+          "401": { "description": "Token não fornecido ou inválido." }
         }
       }
     }
@@ -168,7 +172,8 @@
     "securitySchemes": {
       "bearerAuth": {
         "type": "http",
-        "scheme": "bearer"
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }
