@@ -2,14 +2,27 @@ const request = require('supertest');
 const { expect } = require('chai');
 const API = 'http://localhost:3000';
 
+
 describe('Transfer - External', () => {
     describe('POST /transfers', () => {
-        it('Quando informo remetente e destinatario inexistentes recebo 400', async () => {
+        it('Quando informo destinatario inexistente recebo 400', async () => {
+            // 1 - Capturar token
+            const respostaLogin = await request(API)
+                .post('/auth/login')
+                .send({
+                    email: "string",
+                    password: "string"
+                });
+
+            const token = respostaLogin.body.token;
+
+            // 2 - Usar token na requisição de transferência
             const resposta = await request(API)
                 .post('/transfers')
+                .set('Authorization', `Bearer ${token}`)
                 .send({
-                    fromId: "1",
-                    toId: "2",
+                    fromEmail: "string",
+                    toEmail: "victor",
                     amount: 100
                 });
             expect(resposta.status).to.equal(400);

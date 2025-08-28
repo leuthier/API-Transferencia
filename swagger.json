@@ -49,7 +49,11 @@
                   "name": { "type": "string" },
                   "email": { "type": "string" },
                   "password": { "type": "string" },
-                  "favored": { "type": "boolean" },
+                  "favored": {
+                    "type": "array",
+                    "items": { "type": "string", "description": "Email de usuário existente" },
+                    "description": "Lista de email de usuários favorecidos já cadastrados"
+                  },
                   "balance": { "type": "number" }
                 },
                 "required": ["name", "email", "password"]

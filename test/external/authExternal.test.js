@@ -50,8 +50,10 @@ describe('Auth - External', () => {
             expect(resposta.body).to.have.property('user');
             expect(resposta.body.user).to.have.property('id');
             expect(resposta.body.user.email).to.equal('string');
+            // Comparação de igualdade estrita usando o ===. Verifica se os dois valores são iguais sem fazer conversão de tipo
             expect(resposta.body.user.name).to.equal('string');
-            expect(resposta.body.user.favored).to.equal(true);
+            //  Verifica se os dois valores têm a mesma estrutura e se seus elementos internos (chaves, valores, etc.) são idênticos
+            expect(resposta.body.user.favored).to.eql(['andre@gmail.com']);
             expect(resposta.body.user).to.have.property('balance');
         });
     });

@@ -7,11 +7,21 @@ function userExists(email) {
   return !!users.findByEmail(email);
 }
 
-function registerUser({ name, email, password, favored = false, balance = 0 }){
+function registerUser({ name, email, password, favored = [], balance = 0 }){
   if(!name || !email || !password) throw new Error ('Nome, email e senha são obrigatórios');
 
   const exists = userExists(email);
   if(exists) throw new Error('Usuário já existe');
+
+  // FIXME: Favored deveria aceitar ser vazia
+  if (!Array.isArray(favored)) {
+    throw new Error('Favored deve ser uma lista de emails de usuários');
+  }
+  for (const favEmail of favored) {
+    if (!favEmail || typeof favEmail !== 'string' || !users.findByEmail || !users.findByEmail(favEmail)) {
+      throw new Error('Usuário favorecido não existe ou email inválido');
+    }
+  }
 
   const hashedPassword = bcrypt.hashSync(password, 8);
 
@@ -20,7 +30,7 @@ function registerUser({ name, email, password, favored = false, balance = 0 }){
     name,
     email,
     hashedPassword,
-    favored: !!favored,
+    favored,
     balance
   };
 
