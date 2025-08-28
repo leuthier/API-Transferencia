@@ -18,11 +18,11 @@ const users = [
   },
   {
     "id": "b81a5ae0-32fc-43b0-8f33-dbe419cd6033",
-  "name": "string",
-  "email": "string",
-  "hashedPassword": "$2b$08$kdNY2/VyTSRVd2mKMyfv5uheBB5AHOUe3CNbUPdFAd26xK3eFS0qy",
-  "favored": true,
-  "balance": 0
+    "name": "string",
+    "email": "string",
+    "hashedPassword": "$2b$08$kdNY2/VyTSRVd2mKMyfv5uheBB5AHOUe3CNbUPdFAd26xK3eFS0qy",
+    "favored": true,
+    "balance": 10
   }
 ]
 

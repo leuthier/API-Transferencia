@@ -74,8 +74,8 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "fromId": { "type": "string" },
-                  "toId": { "type": "string" },
+                  "fromEmail": { "type": "string" },
+                  "toEmail": { "type": "string" },
                   "amount": { "type": "number" }
                 },
                 "required": ["fromId", "toId", "amount"]

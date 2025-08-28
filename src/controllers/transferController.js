@@ -5,11 +5,14 @@ const authenticateToken = require('../middleware/authenticateToken');
 
 
 router.post('/', authenticateToken, (req, res) => {
-  const {fromId, toId, amount} = req.body;
-  if(!fromId || !toId) {
+  const {fromEmail, toEmail, amount} = req.body;
+  if(!fromEmail || !toEmail) {
     return res.status(400).json({ error: 'Usuário remetente ou destinatário não foram encontrados'});
   }
-  if (fromId === toId) {
+  if (fromEmail !== req.user.email) {
+    return res.status(403).json({ error: 'Você só pode transferir valores da sua própria conta' });
+  }
+  if (fromEmail === toEmail) {
     return res.status(400).json({ error: 'Não é possível transferir para si mesmo'});
   }
   if (typeof amount !== 'number') {
