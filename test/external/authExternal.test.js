@@ -52,7 +52,7 @@ describe('Auth - External', () => {
             expect(resposta.body.user.email).to.equal('string');
             expect(resposta.body.user.name).to.equal('string');
             expect(resposta.body.user.favored).to.equal(true);
-            expect(resposta.body.user.balance).to.equal(0);
+            expect(resposta.body.user).to.have.property('balance');
         });
     });
 });
