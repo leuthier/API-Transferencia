@@ -24,8 +24,8 @@ describe('Transfer Controller - Mock', () => {
                 to: { id: 'leut', balance: 1100 },
                 transfer: {
                     id: 'fake-transfer-id',
-                    fromId: 'victor',
-                    toId: 'leut',
+                    fromEmail: 'victor',
+                    toEmail: 'leut',
                     amount: 100,
                     createdAt: new Date().toISOString()
                 }

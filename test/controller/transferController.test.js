@@ -96,13 +96,35 @@ describe('Transfer Controller - Mock', () => {
     });
 
     describe('GET /transfers', () => {
-        it('Deve retornar lista de transferências', async () => {
+        it.only('Deve retornar lista de transferências', async () => {
             const mockTransfers = [
-                { id: 't1', fromId: 'u1', toId: 'u2', amount: 100, createdAt: '2025-08-23T10:00:00Z' },
-                { id: 't2', fromId: 'u2', toId: 'u3', amount: 200, createdAt: '2025-08-23T11:00:00Z' }
+                { id: 't1',
+                    from: {
+                        id: 'user1',
+                        email: 'email1'
+                    },
+                    to: {
+                        id: 'u2',
+                        email: 'email2' 
+                    },
+                    amount: 100,
+                    createdAt: '2025-08-23T10:00:00Z'
+                },
+                { id: 't2',
+                    from: {
+                        id: 'u2',
+                        email: 'email2'
+                    },
+                    to: {
+                        id: 'u3',
+                        email: 'email3'
+                    }, amount: 200,
+                    createdAt: '2025-08-23T11:00:00Z'
+                }
             ];
             sinon.stub(transferService, 'listTransfers').returns(mockTransfers);
-            const resposta = await request(app).get('/transfers');
+            
+            const resposta = await request(app).get('/transfers').set('Authorization', `Bearer valid-token`);
             expect(resposta.status).to.equal(200);
             expect(resposta.body).to.be.an('array').with.lengthOf(2);
             expect(resposta.body[0]).to.have.property('id', 't1');
