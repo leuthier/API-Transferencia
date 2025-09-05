@@ -1,68 +1,61 @@
-// Bibliotecas
+
 const request = require('supertest');
 const sinon = require('sinon');
 const { expect } = require('chai');
-
-// Aplicação
-const app = require('../../app');
-
-// Mock
+const jwt = require('jsonwebtoken');
 const transferService = require('../../src/services/transferService');
-const e = require('express');
+const app = require('../../app');
+const { create } = require('../../src/models/userModel');
 
-// Testes
-describe('Transfer Controller - Mock', () => {
+describe('Transfer Controller - Mock - Fixture', () => {
+    beforeEach(() => {
+        sinon.stub(transferService, 'transfer').returns({
+            transfer: {
+                id: "69338a9b-8a5a-41ef-808f-aedf72ebeac5",
+                from: {
+                    id: "b81a5ae0-32fc-43b0-8f33-dbe419cd6033",
+                    email: "string"
+                },
+                "to": {
+                    id: "eb2d3111-4f9b-4bbe-88ec-89c623c49a46",
+                    email: "andre@gmail.com"
+                },
+                "amount": 10,
+                "createdAt": new Date().toISOString()
+            }
+        });
+       
+    });
+
     afterEach(() => {
         sinon.restore();
     });
-    
+
     describe('POST /transfers', () => {
-        it('Quando informo valores válidos eu tenho sucesso com 201 CREATED', async () => {
-            const transferServiceMock = sinon.stub(transferService, 'transfer');
-            transferServiceMock.returns({
-                from: { id: 'victor', balance: 900 },
-                to: { id: 'leut', balance: 1100 },
-                transfer: {
-                    id: 'fake-transfer-id',
-                    fromEmail: 'victor',
-                    toEmail: 'leut',
-                    amount: 100,
-                    createdAt: new Date().toISOString()
-                }
-            });
+        it('Quando informo valores válidos eu tenho sucesso com 201', async () => {
+            // Gera token JWT válido
+            const secret = process.env.JWT_SECRET || 'top-secret';
+
+            const mockUser = { id: 'user-id', email: 'string', name: 'User Name' };
+            const token = jwt.sign(mockUser, secret, { expiresIn: '1h' });
 
             const resposta = await request(app)
                 .post('/transfers')
+                .set('Authorization', `Bearer ${token}`)
                 .send({
-                    fromId: "victor",
-                    toId: "leut",
-                    amount: 100
+                    fromEmail: 'string',
+                    toEmail: 'andre@gmail.com',
+                    amount: 10
                 });
 
             expect(resposta.status).to.equal(201);
-
-            // Validação com fixture
-            const respostaEsperada = require('../fixture/response/quandoInformoUsuariosExistentesEvalorPositivoEuTenhoSucessoCom201');
-            
-            // Manipulação para editar campos
-            //respostaEsperada.transfer.createdAt = respostaEsperada.transfer.createdAt.split('T')[0];
-
-            // Usar deep equal para comparar objetos - Date = objeto dinamico, então seria diferente e por isso é necessário remover o campo
+            const respostaEsperada = require('../fixture/response/quandoInformoUsuariosExistentesEvalorPositivoEuTenhoSucessoCom201.json');
+            // Remover createdAt dinâmico para comparação
             delete resposta.body.transfer.createdAt;
             delete respostaEsperada.transfer.createdAt;
-            
-            expect(resposta.status).to.equal(201);
             expect(resposta.body).to.deep.equal(respostaEsperada);
-
-            // Mesma comparação
-            //expect(resposta.body).to.eql(respostaEsperada);
-
-            //expect(resposta.body).to.have.property('from');
-            //expect(resposta.body.from).to.have.property('id', 'victor');
-            //expect(resposta.body.to).to.have.property('id', 'leut');
-            //expect(resposta.body).to.have.property('transfer');
-            //expect(resposta.body.transfer).to.have.property('id', 'fake-transfer-id');
-            //expect(resposta.body.transfer).to.have.property('amount', 100);
         });
+
     });
+    
 });
