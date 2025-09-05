@@ -82,7 +82,7 @@
                   "toEmail": { "type": "string" },
                   "amount": { "type": "number" }
                 },
-                "required": ["fromId", "toId", "amount"]
+                "required": ["fromEmail", "toEmail", "amount"]
               }
             }
           }
@@ -95,26 +95,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "from": {
-                      "type": "object",
-                      "properties": {
-                        "id": { "type": "string" },
-                        "balance": { "type": "number" }
-                      }
-                    },
-                    "to": {
-                      "type": "object",
-                      "properties": {
-                        "id": { "type": "string" },
-                        "balance": { "type": "number" }
-                      }
-                    },
                     "transfer": {
                       "type": "object",
                       "properties": {
                         "id": { "type": "string" },
-                        "fromId": { "type": "string" },
-                        "toId": { "type": "string" },
+                        "from": { "type": "object",
+                          "properties": {
+                              "id": { "type": "string" },
+                              "email": { "type": "string" }
+                          }
+                        },
+                        "to": { "type": "object",
+                          "properties": {
+                              "id": { "type": "string" },
+                              "email": { "type": "string" }
+                          }
+                        },
                         "amount": { "type": "number" },
                         "createdAt": { "type": "string", "format": "date-time" }
                       }
