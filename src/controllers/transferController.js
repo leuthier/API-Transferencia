@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const transferService = require('../services/transferService');
-const authenticateToken = require('../middleware/authenticateToken');
+const { authenticateToken } = require('../middleware/authenticateToken');
 
 
 router.post('/', authenticateToken, (req, res) => {

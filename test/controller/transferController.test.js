@@ -11,7 +11,17 @@ const transferService = require('../../src/services/transferService');
 
 // Testes
 describe('Transfer Controller - Mock', () => {
-    afterEach(() => {
+    before(async () => {
+        const login = await request(app)
+            .post('/auth/login')
+            .send({
+                email: 'string',
+                password: 'string'
+            });
+        token = login.body.token;
+    });
+
+    beforeEach(() => {
         sinon.restore();
     });
     
@@ -21,11 +31,13 @@ describe('Transfer Controller - Mock', () => {
             const transferServiceMock = sinon.stub(transferService, 'transfer');
             transferServiceMock.throws(new Error('Usuário remetente ou destinatário não encontrado'));
 
+            // Fazer a requisição
             const resposta = await request(app)
                 .post('/transfers')
+                .set('Authorization',`Bearer ${token}`)
                 .send({
-                    fromId: "victor",
-                    toId: "leut",
+                    fromEmail: "string",
+                    toEmail: "leut",
                     amount: 100
                 });
             expect(resposta.status).to.equal(400);
@@ -35,29 +47,33 @@ describe('Transfer Controller - Mock', () => {
         it('Quando informo valores válidos eu tenho sucesso com 201 CREATED', async () => {
             const transferServiceMock = sinon.stub(transferService, 'transfer');
             transferServiceMock.returns({
-                from: { id: 'victor', balance: 900 },
-                to: { id: 'leut', balance: 1100 },
                 transfer: {
                     id: 'fake-transfer-id',
-                    fromId: 'victor',
-                    toId: 'leut',
+                    from: {
+                        id: 'fake-string-id',
+                        email: 'string',
+                    },
+                    to: {
+                        id: 'fake-victor-id',
+                        email: 'victor@leuth.com',
+                    },
                     amount: 100,
-                    createdAt: new Date().toISOString()
+                    createdAt: '2025-08-25T01:41:19.859Z'
                 }
             });
 
             const resposta = await request(app)
                 .post('/transfers')
+                .set('Authorization',`Bearer ${token}`)
                 .send({
-                    fromId: "victor",
-                    toId: "leut",
+                    fromEmail: "string",
+                    toEmail: "victor@leuth.com",
                     amount: 100
                 });
             expect(resposta.status).to.equal(201);
-            expect(resposta.body).to.have.property('from');
-            expect(resposta.body.from).to.have.property('id', 'victor');
-            expect(resposta.body.to).to.have.property('id', 'leut');
             expect(resposta.body).to.have.property('transfer');
+            expect(resposta.body.transfer.from).to.have.property('email', 'string');
+            expect(resposta.body.transfer.to).to.have.property('email', 'victor@leuth.com');
             expect(resposta.body.transfer).to.have.property('id', 'fake-transfer-id');
             expect(resposta.body.transfer).to.have.property('amount', 100);
             expect(resposta.body.transfer).to.have.property('createdAt', '2025-08-25T01:41:19.859Z');
@@ -69,9 +85,10 @@ describe('Transfer Controller - Mock', () => {
 
             const resposta = await request(app)
                 .post('/transfers')
+                .set('Authorization',`Bearer ${token}`)
                 .send({
-                    fromId: "victor",
-                    toId: "victor",
+                    fromEmail: "string",
+                    toEmail: "string",
                     amount: 100
                 });
             expect(resposta.status).to.equal(400);
@@ -84,9 +101,10 @@ describe('Transfer Controller - Mock', () => {
 
             const resposta = await request(app)
                 .post('/transfers')
+                .set('Authorization',`Bearer ${token}`)
                 .send({
-                    fromId: "victor",
-                    toId: "leut",
+                    fromEmail: "string",
+                    toEmail: "andre@gmail.com",
                     amount: -1
                 });
             expect(resposta.status).to.equal(400);
@@ -96,7 +114,7 @@ describe('Transfer Controller - Mock', () => {
     });
 
     describe('GET /transfers', () => {
-        it.only('Deve retornar lista de transferências', async () => {
+        it('Deve retornar lista de transferências', async () => {
             const mockTransfers = [
                 { id: 't1',
                     from: {
@@ -124,7 +142,9 @@ describe('Transfer Controller - Mock', () => {
             ];
             sinon.stub(transferService, 'listTransfers').returns(mockTransfers);
             
-            const resposta = await request(app).get('/transfers').set('Authorization', `Bearer valid-token`);
+            const resposta = await request(app)
+                .get('/transfers')
+                .set('Authorization', `Bearer ${token}`);
             expect(resposta.status).to.equal(200);
             expect(resposta.body).to.be.an('array').with.lengthOf(2);
             expect(resposta.body[0]).to.have.property('id', 't1');
