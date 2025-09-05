@@ -1,8 +1,10 @@
 const request = require('supertest');
 const sinon = require('sinon');
 const { expect } = require('chai');
+const userService = require('../../src/services/userService');
 
 const app = require('../../app');
+const e = require('express');
 
 describe('User Controller - Mock', () => {
     afterEach(() => {
@@ -11,7 +13,6 @@ describe('User Controller - Mock', () => {
 
     describe('GET /users', () => {
         it('Deve retornar lista de usuários', async () => {
-            const userService = require('../../src/services/userService');
             const mockUsers = [
                 { id: 'u1', name: 'Alice', email: 'alice@email.com', favored: true, balance: 1000 },
                 { id: 'u2', name: 'Bob', email: 'bob@email.com', favored: false, balance: 500 }
@@ -27,21 +28,19 @@ describe('User Controller - Mock', () => {
 
     describe('POST /users', () => {
         it('Quando informo email já cadastrado recebo 400', async () => {
-            const userService = require('../../src/services/userService');
+            //sinon.stub(userService, 'registerUser').throws(new Error('Usuário já existe'));
             sinon.stub(userService, 'userExists').returns(true);
-
             const resposta = await request(app)
                 .post('/users')
                 .send({
-                    name: "victor name",
-                    email: "victor@email.com",
-                    password: "1234",
-                    favored: true,
-                    balance: 100
+                    "name": "string",
+                    "email": "string",
+                    "password": "string",
+                    "favored": true,
+                    "balance": 0
                 });
             expect(resposta.status).to.equal(400);
-            expect(resposta.body.error).to.equal('Email já cadastrado');    
+            expect(resposta.body.error).to.equal('Usuário já existe');    
         });
-    });
-
+    });   
 });

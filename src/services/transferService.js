@@ -2,28 +2,34 @@ const userModel = require('../models/userModel');
 const { v4: uuidv4 } = require('uuid');
 const transferModel = require('../models/transferModel');
 
-function transfer({ fromId, toId, amount }){
-  const from = userModel.findById(fromId);
-  const to = userModel.findById(toId);
+function transfer({ fromEmail, toEmail, amount }){
+  const fromUser = userModel.findByEmail(fromEmail);
+  const toUser = userModel.findByEmail(toEmail);
 
-  if(!from || !to) throw new Error('Usuário remetente ou destinatário não encontrado');
+  if(!fromUser || !toUser) throw new Error('Usuário remetente ou destinatário não encontrado');
   
   if(amount <= 0) throw new Error("Valor deve ser maior que zero");
 
-  if(from.id === to.id) throw new Error("Não é possível transferir para si mesmo");
+  if(fromUser === toUser) throw new Error("Não é possível transferir para si mesmo");
   
   // regra: transferências para destinatários não favorecidos somente se amount < 5000
-  if(!to.favored && amount >= 5000) throw new Error("Transferência acima de R$ 5.000,00 só para favorecidos");
+  if(!toUser.favored && amount >= 5000) throw new Error("Transferência acima de R$ 5.000,00 só para favorecidos");
 
-  if(from.balance < amount) throw new Error("Saldo insuficiente");
+  if(fromUser.balance < amount) throw new Error("Saldo insuficiente");
 
-  from.balance -= amount;
-  to.balance += amount;
+  fromUser.balance -= amount;
+  toUser.balance += amount;
 
   const transfer = {
     id: uuidv4(),
-    fromId: from.id,
-    toId: to.id,
+    from: {
+      id: fromUser.id,
+      email: fromUser.email,
+    },
+    to: {
+      id: toUser.id,  
+      email: toUser.email,
+    },
     amount,
     createdAt: new Date().toISOString()
   };
@@ -31,14 +37,6 @@ function transfer({ fromId, toId, amount }){
   transferModel.create(transfer);
 
   return {
-    from: { 
-        id: from.id,
-        balance: from.balance
-    },
-    to: {
-        id: to.id,
-        balance: to.balance
-    },
     transfer };
 }
 

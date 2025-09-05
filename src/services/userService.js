@@ -7,11 +7,21 @@ function userExists(email) {
   return !!users.findByEmail(email);
 }
 
-function registerUser({ name, email, password, favored = false, balance = 0 }){
+function registerUser({ name, email, password, favored = [], balance = 0 }){
   if(!name || !email || !password) throw new Error ('Nome, email e senha são obrigatórios');
 
   const exists = userExists(email);
   if(exists) throw new Error('Usuário já existe');
+
+  // FIXME: Favored deveria aceitar ser vazia
+  if (!Array.isArray(favored)) {
+    throw new Error('Favored deve ser uma lista de emails de usuários');
+  }
+  for (const favEmail of favored) {
+    if (!favEmail || typeof favEmail !== 'string' || !users.findByEmail || !users.findByEmail(favEmail)) {
+      throw new Error('Usuário favorecido não existe ou email inválido');
+    }
+  }
 
   const hashedPassword = bcrypt.hashSync(password, 8);
 
@@ -20,7 +30,7 @@ function registerUser({ name, email, password, favored = false, balance = 0 }){
     name,
     email,
     hashedPassword,
-    favored: !!favored,
+    favored,
     balance
   };
 
@@ -29,23 +39,46 @@ function registerUser({ name, email, password, favored = false, balance = 0 }){
 }
 
 function listUsers(){
-  return users.getAll().map(u => ({ id: u.id, name: u.name, email: u.email, favored: u.favored, balance: u.balance }));
+  return users.getAll().map(u => ({ 
+    id: u.id,
+    name: u.name,
+    email: u.email,
+    password: u.hashedPassword,
+    favored: u.favored,
+    balance: u.balance
+  }));
 }
 
 function authenticate({ email, password }){
-  if(!email || !password) throw new Error ('Email e senha são obrigatórios');
   const user = users.findByEmail(email);
-  if(!user || !bcrypt.compareSync(password, user.hashedPassword)) throw new Error ('Credenciais inválidas');
+  if(!user || !bcrypt.compareSync(password, user.hashedPassword)) {
+    const err = new Error('Credenciais inválidas');
+    err.status = 400;
+    throw err;
+  }
 
   // Gerar JWT
   const secret = process.env.JWT_SECRET || 'top-secret';
   const token = jwt.sign(
-    { id: user.id, email: user.email, name: user.name },
+    { id: user.id,
+      name: user.name,
+      email: user.email,
+      favored: user.favored,
+      balance: user.balance
+    },
     secret,
     { expiresIn: '1h' }
   );
 
-  return { token, user: { id: user.id, email: user.email, name: user.name, favored: user.favored, balance: user.balance }};
+  return { token,
+          user: { 
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            favored: user.favored,
+            balance: user.balance
+            }
+         };
 }
 
 function transfer(payload){

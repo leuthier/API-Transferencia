@@ -1,92 +1,18 @@
-/**
- * @swagger
- * /transfers:
- *   get:
- *     summary: Listar transferências
- *     responses:
- *       200:
- *         description: Lista de transferências
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id: { type: string }
- *                   fromId: { type: string }
- *                   toId: { type: string }
- *                   amount: { type: number }
- *                   createdAt: { type: string, format: date-time }
- */
-/**
- * @swagger
- * /transfers:
- *   post:
- *     summary: Realizar transferência entre usuários
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               fromId:
- *                 type: string
- *                 example: "user1"
- *               toId:
- *                 type: string
- *                 example: "user2"
- *               amount:
- *                 type: number
- *                 example: 100
- *     responses:
- *       201:
- *         description: Transferência realizada com sucesso
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 from:
- *                   type: object
- *                   properties:
- *                     id: { type: string }
- *                     balance: { type: number }
- *                 to:
- *                   type: object
- *                   properties:
- *                     id: { type: string }
- *                     balance: { type: number }
- *                 transfer:
- *                   type: object
- *                   properties:
- *                     id: { type: string }
- *                     fromId: { type: string }
- *                     toId: { type: string }
- *                     amount: { type: number }
- *                     createdAt: { type: string, format: date-time }
- *       400:
- *         description: Erro de validação ou negócio
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- */
 const express = require('express');
 const router = express.Router();
 const transferService = require('../services/transferService');
+const { authenticateToken } = require('../middleware/authenticateToken');
 
 
-router.post('/', (req, res) => {
-  const {fromId, toId, amount} = req.body;
-  if(!fromId || !toId) {
+router.post('/', authenticateToken, (req, res) => {
+  const {fromEmail, toEmail, amount} = req.body;
+  if(!fromEmail || !toEmail) {
     return res.status(400).json({ error: 'Usuário remetente ou destinatário não foram encontrados'});
   }
-  if (fromId === toId) {
+  if (fromEmail !== req.user.email) {
+    return res.status(403).json({ error: 'Você só pode transferir valores da sua própria conta' });
+  }
+  if (fromEmail === toEmail) {
     return res.status(400).json({ error: 'Não é possível transferir para si mesmo'});
   }
   if (typeof amount !== 'number') {
@@ -103,7 +29,7 @@ router.post('/', (req, res) => {
   }
 });
 
-router.get('/', (req, res) => {
+router.get('/', authenticateToken, (req, res) => {
   res.json(transferService.listTransfers());
 });
 
