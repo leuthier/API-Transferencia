@@ -4,10 +4,9 @@ const swaggerDocument = require('./swagger.json');
 const usersRouter = require('./src/controllers/usersController');
 const authRouter = require('./src/controllers/authController');
 const transferRouter = require('./src/controllers/transferController');
-
 const app = express();
-app.use(express.json());
 
+app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // rotas
