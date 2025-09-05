@@ -111,6 +111,31 @@ describe('Transfer Controller - Mock', () => {
             expect(resposta.body.error).to.equal('O valor deve ser maior que zero');
         });
 
+        it('Quando não informo o Token, deve retornar 401', async () => {
+            const resposta = await request(app)
+                .post('/transfers')
+                .send({
+                    fromEmail: 'string',
+                    toEmail: 'andre@gmail.com',
+                    amount: 10
+                });
+            expect(resposta.status).to.equal(401);
+            expect(resposta.body).to.have.property('error', 'Token não fornecido');
+        });
+
+        it('Quando token for inválido, deve retornar 401', async () => {
+        const resposta = await request(app)
+            .post('/transfers')
+            .set('Authorization', 'Bearer token-invalido')
+            .send({
+                fromId: 'user1',
+                toId: 'user2',
+                amount: 100
+            });
+        expect(resposta.status).to.equal(401);
+        expect(resposta.body).to.have.property('error', 'Token inválido');
+    });
+
     });
 
     describe('GET /transfers', () => {
