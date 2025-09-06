@@ -3,16 +3,16 @@ const { gql } = require('apollo-server-express');
 const typeDefs = gql`
   type User {
     id: ID!
-    name: String!
     email: String!
+    name: String!
     favored: [String]
     balance: Float
   }
 
   type Transfer {
     id: ID!
-    fromId: String!
-    toId: String!
+    from: User!
+    to: User!
     amount: Float!
     createdAt: String!
   }

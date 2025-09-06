@@ -6,7 +6,10 @@ const SECRET = process.env.JWT_SECRET || 'top-secret';
 module.exports = {
   Query: {
     users: () => userService.listUsers(),
-    transfers: () => transferService.listTransfers ? transferService.listTransfers() : [],
+    transfers: () => {
+      // Retorna transfers diretamente, assumindo que from/to já são objetos User
+      return transferService.listTransfers ? transferService.listTransfers() : [];
+    },
   },
   Mutation: {
     registerUser: (_, args) => userService.registerUser(args),

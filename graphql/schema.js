@@ -11,8 +11,8 @@ module.exports = gql`
 
   type Transfer {
     id: ID!
-    fromId: String!
-    toId: String!
+    from: User!
+    to: User!
     amount: Float!
     createdAt: String!
   }
