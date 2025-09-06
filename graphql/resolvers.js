@@ -6,7 +6,8 @@ const SECRET = process.env.JWT_SECRET || 'top-secret';
 module.exports = {
   Query: {
     users: () => userService.listUsers(),
-    transfers: () => {
+    transfers: (_, __, context) => {
+      if (!context.user) throw new Error('Token inválido');
       // Retorna transfers diretamente, assumindo que from/to já são objetos User
       return transferService.listTransfers ? transferService.listTransfers() : [];
     },
@@ -18,7 +19,7 @@ module.exports = {
       return { token: result.token, user: result.user };
     },
     transfer: (_, { fromEmail, toEmail, amount }, context) => {
-      if (!context.user) throw new Error('Autenticação obrigatória');
+      if (!context.user) throw new Error('Token inválido');
       if (fromEmail !== context.user.email) throw new Error('Você só pode transferir valores da sua própria conta');
       return transferService.transfer({ fromEmail, toEmail, amount });
     },
