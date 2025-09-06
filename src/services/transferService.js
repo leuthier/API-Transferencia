@@ -12,8 +12,10 @@ function transfer({ fromEmail, toEmail, amount }){
 
   if(fromUser === toUser) throw new Error("Não é possível transferir para si mesmo");
   
-  // regra: transferências para destinatários não favorecidos somente se amount < 5000
-  if(!toUser.favored && amount >= 5000) throw new Error("Transferência acima de R$ 5.000,00 só para favorecidos");
+  // regra: transferências >= 5000 só se toEmail está em fromUser.favored
+  if (amount >= 5000 && !(fromUser.favored && fromUser.favored.includes(toEmail))) {
+    throw new Error("Transferência acima de R$ 5.000,00 só para favorecidos");
+  }
 
   if(fromUser.balance < amount) throw new Error("Saldo insuficiente");
 
