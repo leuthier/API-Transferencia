@@ -143,5 +143,6 @@ dist
 
 .github/copilot-instructions.md
 .vscode/
+mochawesome-report/
 
 # End of https://www.toptal.com/developers/gitignore/api/node
