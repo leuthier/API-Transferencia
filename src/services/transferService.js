@@ -36,8 +36,7 @@ function transfer({ fromEmail, toEmail, amount }){
 
   transferModel.create(transfer);
 
-  return {
-    transfer };
+  return transfer;
 }
 
 function listTransfers(){
