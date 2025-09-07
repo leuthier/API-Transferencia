@@ -143,6 +143,7 @@ query Transfer {
 1) Para logar, email e senha devem ser informados.
 2) Não é possível registrar usuários com email duplicado.
 3) Transferências para destinatários que não são marcados como "favorecido" só podem ser realizadas se o valor for menor que R$ 5.000,00.
+4) Não é possível transferir valores para a própria conta
 
 ## Banco de dados
 
