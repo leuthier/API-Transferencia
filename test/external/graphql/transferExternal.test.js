@@ -1,6 +1,6 @@
 const request = require('supertest');
 const { expect } = require('chai');
-const app = require('../../app'); // Ajuste o caminho se necessário
+const app = require('../../../graphql/app'); // Ajuste o caminho se necessário
 
 // Helper para obter token JWT
 async function getToken(email, password) {
@@ -13,16 +13,18 @@ async function getToken(email, password) {
     .post('/graphql')
     .send({
       query,
-      variables: { email, password }
+      variables: { 
+        email,
+        password
+      }
     });
   return res.body.data.login.token;
 }
 
 describe('Transfer - External GraphQL', () => {
     describe('Mutation Transfer', function () {
-        let token;
+        var token;
         before(async function () {
-            // Use um usuário válido existente
             token = await getToken('string', 'string');
         });
 
@@ -37,9 +39,9 @@ describe('Transfer - External GraphQL', () => {
             }
             }`;
             const variables = {
-            fromEmail: 'string',
-            toEmail: 'victor@leuth.com',
-            amount: 10
+              fromEmail: 'string',
+              toEmail: 'victor@leuth.com',
+              amount: 10
             };
             const res = await request(app)
             .post('/graphql')
@@ -51,20 +53,31 @@ describe('Transfer - External GraphQL', () => {
         });
 
         it('Conta sem saldo disponível para transferência', async function () {
-            const mutation = `mutation Transfer($fromEmail: String!, $toEmail: String!, $amount: Float!) {
-            transfer(fromEmail: $fromEmail, toEmail: $toEmail, amount: $amount) {
-                id
-            }
-            }`;
-            const variables = {
-            fromEmail: 'string',
-            toEmail: 'victor@leuth.com',
-            amount: 101 // Total maior que o disponível em \src\models\userModel.js
-            };
             const res = await request(app)
             .post('/graphql')
             .set('Authorization', `Bearer ${token}`)
-            .send({ query: mutation, variables });
+            .send({ query: `
+                        mutation Transfer($fromEmail: String!, $toEmail: String!, $amount: Float!) {
+                          transfer(fromEmail: $fromEmail, toEmail: $toEmail, amount: $amount) {
+                            id
+                            from {
+                              id
+                              email
+                            }
+                            to {
+                              id
+                              email
+                            }
+                            amount
+                            createdAt
+                          }
+                        }`, 
+              variables: {
+                fromEmail: 'string',
+                toEmail: 'victor@leuth.com',
+                amount: 101 // Total maior que o disponível em \src\models\userModel.js
+              }
+             });
             expect(res.body.data.transfer).to.be.null;
             expect(res.body.errors[0].message).to.match(/Saldo insuficiente/);
         });
