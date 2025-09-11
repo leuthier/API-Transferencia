@@ -3,9 +3,9 @@ const request = require('supertest');
 const sinon = require('sinon');
 const { expect } = require('chai');
 const jwt = require('jsonwebtoken');
-const transferService = require('../../src/services/transferService');
-const app = require('../../app');
-const { create } = require('../../src/models/userModel');
+const transferService = require('../../../src/services/transferService');
+const app = require('../../../app');
+const { create } = require('../../../src/models/userModel');
 
 describe('Transfer Controller - Mock - Fixture', () => {
     beforeEach(() => {
