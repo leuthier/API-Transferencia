@@ -19,81 +19,32 @@ describe('Transfer - External GraphQL', () => {
 
     describe('Mutation Transfer', function () {
         it('Transferência realizada sucesso', async function () {
+            const transferRequest = require('../fixture/request/transfer/createTransfer.json');
             const res = await request(app)
             .post('/graphql')
             .set('Authorization', `Bearer ${token}`)
-            .send({
-              query: `
-                mutation Transfer($fromEmail: String!, $toEmail: String!, $amount: Float!) {
-                  transfer(fromEmail: $fromEmail, toEmail: $toEmail, amount: $amount) {
-                    id
-                    from { id email }
-                    to { id email }
-                    amount
-                    createdAt
-                  }
-                }
-              `,
-              variables: {
-                fromEmail: 'string',
-                toEmail: 'victor@leuth.com',
-                amount: 10
-              }
-            });
+            .send(transferRequest);
             expect(res.body.data.transfer).to.have.property('id');
             expect(res.body.data.transfer.amount).to.equal(10);
             expect(res.body.errors).to.be.undefined;
         });
 
         it('Conta sem saldo disponível para transferência', async function () {
-            const res = await request(app)
+          const transferRequest = require('../fixture/request/transfer/createTransfer.json');  
+          transferRequest.variables.amount = 101;
+          const res = await request(app)
             .post('/graphql')
             .set('Authorization', `Bearer ${token}`)
-            .send({
-              query: `
-                mutation Transfer($fromEmail: String!, $toEmail: String!, $amount: Float!) {
-                  transfer(fromEmail: $fromEmail, toEmail: $toEmail, amount: $amount) {
-                    id
-                    from {
-                      id
-                      email
-                    }
-                    to {
-                      id
-                      email
-                    }
-                    amount
-                    createdAt
-                  }
-                }
-              `, 
-              variables: {
-                fromEmail: 'string',
-                toEmail: 'victor@leuth.com',
-                amount: 101 // Total maior que o disponível em \src\models\userModel.js
-              }
-             });
+            .send(transferRequest);
             expect(res.body.data.transfer).to.be.null;
             expect(res.body.errors[0].message).to.match(/Saldo insuficiente/);
         });
 
         it('Token de autenticação não informado', async function () {
+            const transferRequest = require('../fixture/request/transfer/createTransfer.json');
             const res = await request(app)
             .post('/graphql')
-            .send({
-              query: `
-                mutation Transfer($fromEmail: String!, $toEmail: String!, $amount: Float!) {
-                  transfer(fromEmail: $fromEmail, toEmail: $toEmail, amount: $amount) {
-                    id
-                  }
-                }
-              `,
-              variables: {
-                fromEmail: 'string',
-                toEmail: 'victor@leuth.com',
-                amount: 10
-                }
-            });
+            .send(transferRequest);
             expect(res.body.data.transfer).to.be.null;
             expect(res.body.errors[0].message).to.match(/Token inválido/);
         });
