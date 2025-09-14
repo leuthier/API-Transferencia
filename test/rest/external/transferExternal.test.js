@@ -51,13 +51,13 @@ describe('Transfer - External', () => {
                 .send({
                     fromEmail: "string",
                     toEmail: "victor@leuth.com",
-                    amount: 100
+                    amount: 1
                 });
             const createdAt = resposta.body.createdAt;
             const dateObject = new Date(createdAt);
             expect(resposta.status).to.equal(201);
             expect(isUuid(resposta.body.id)).to.be.true;
-            expect(resposta.body).to.have.property( 'amount', 100);
+            expect(resposta.body).to.have.property( 'amount', 1);
             expect(resposta.body).to.have.property('createdAt');
             // Verifica se createdAt é uma data ISO 8601 válida
             expect(dateObject.toISOString()).to.equal(createdAt);

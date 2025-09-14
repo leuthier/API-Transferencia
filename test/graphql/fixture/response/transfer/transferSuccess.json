@@ -1,0 +1,17 @@
+{
+  "data": {
+    "transfer": {
+      "id": "2c7910ff-26b5-4620-b4ff-313971161883",
+      "from": {
+        "id": "b81a5ae0-32fc-43b0-8f33-dbe419cd6033",
+        "email": "string"
+      },
+      "to": {
+        "id": "84e47cef-4783-4398-9d72-6eed9d67bf8e",
+        "email": "victor@leuth.com"
+      },
+      "amount": 10,
+      "createdAt": "2025-09-14T21:00:52.539Z"
+    }
+  }
+}

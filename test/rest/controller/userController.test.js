@@ -1,9 +1,9 @@
 const request = require('supertest');
 const sinon = require('sinon');
 const { expect } = require('chai');
-const userService = require('../../src/services/userService');
+const userService = require('../../../src/services/userService');
 
-const app = require('../../app');
+const app = require('../../../app');
 const e = require('express');
 
 describe('User Controller - Mock', () => {
