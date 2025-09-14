@@ -1,4 +1,6 @@
 
+[![Node.js CI](https://github.com/leuthier/API-Transferencia/actions/workflows/nodejs.yml/badge.svg)](https://github.com/leuthier/API-Transferencia/actions/workflows/nodejs.yml)
+
 # API Testes - Express & GraphQL
 
 API de exemplo para aprendizado de testes e automação (Mocha, Supertest, GraphQL)
