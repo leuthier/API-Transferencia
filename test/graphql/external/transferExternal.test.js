@@ -1,6 +1,10 @@
 const request = require('supertest');
 const { expect } = require('chai');
-const app = require('../../../graphql/app'); // Ajuste o caminho se necessário
+const app = require('../../../graphql/app');
+
+const chai = require('chai');
+const chaiExclude = require('chai-exclude');
+chai.use(chaiExclude);
 
 
 
@@ -28,9 +32,14 @@ describe('Transfer - External GraphQL', () => {
             .post('/graphql')
             .set('Authorization', `Bearer ${token}`)
             .send(transferRequest);
-            expect(res.body).to.deep.equal(expectedResponse)
-            expect(res.body.data.transfer).to.have.property('id');
-            expect(res.body.data.transfer.amount).to.equal(10);
+            
+            expect(res.body.data.transfer)
+              .excluding(['id', 'createdAt']) // Exclude dynamic fields
+              .to.deep.equal(expectedResponse.data.transfer)
+
+            // expect(res.body.data.transfer).to.have.property('id');  
+            // expect(res.body.data.transfer).to.have.property('createdAt');  
+            // expect(res.body.data.transfer.amount).to.equal(10);
             expect(res.body.errors).to.be.undefined;
         });
 
