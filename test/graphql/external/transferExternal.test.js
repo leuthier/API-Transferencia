@@ -10,17 +10,18 @@ chai.use(chaiExclude);
 
 
 describe('Transfer - External GraphQL', () => {
-  
-  // Before each not need to login because the token is valid for all tests. Only expires after 1h and tests are running within 1s.
-  
+
+  let token;
+  let transferRequest;
+
   before(async () => { 
     const loginUser = require('../fixture/request/login/loginUser.json');
     const resposta = await request(process.env.BASE_URL_GRAPHQL)
       .post('/graphql')
       .send(loginUser);
-
     token = await resposta.body.data.login.token;
-    });
+    transferRequest = require('../fixture/request/transfer/createTransfer.json');
+  });
 
   beforeEach(() => {
     transferRequest = require('../fixture/request/transfer/createTransfer.json');

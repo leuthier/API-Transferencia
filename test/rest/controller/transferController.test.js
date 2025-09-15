@@ -10,7 +10,9 @@ const app = require('../../../app');
 const transferService = require('../../../src/services/transferService');
 
 // Testes
+
 describe('Transfer Controller - Mock', () => {
+    let token;
     before(async () => {
         const login = await request(app)
             .post('/auth/login')

@@ -1,12 +1,12 @@
 const request = require('supertest');
 const { expect } = require('chai');
-const API = 'http://localhost:3000';
+require('dotenv').config();
 
 
 describe('Auth - External', () => {
     describe('POST /auth/login', () => {
         it('Quando não informo email e senha recebo 400', async () => {
-            const resposta = await request(API)
+            const resposta = await request(process.env.BASE_URL_REST)
                 .post('/auth/login')
                 .send({
                     email: "",
@@ -17,7 +17,7 @@ describe('Auth - External', () => {
         });
 
         it('Quando informo email inválido recebo 400', async () => {
-            const resposta = await request(API)
+            const resposta = await request(process.env.BASE_URL_REST)
                 .post('/auth/login')
                 .send({
                     email: "invalid@gmail.com",
@@ -28,7 +28,7 @@ describe('Auth - External', () => {
         });
 
         it('Quando informo senha inválida recebo 400', async () => {
-            const resposta = await request(API)
+            const resposta = await request(process.env.BASE_URL_REST)
                 .post('/auth/login')
                 .send({
                     email: "string",
@@ -39,7 +39,7 @@ describe('Auth - External', () => {
         });
 
         it('Quando informo email e senha válidos recebo token', async () => {
-            const resposta = await request(API)
+            const resposta = await request(process.env.BASE_URL_REST)
                 .post('/auth/login')
                 .send({
                     email: "string",

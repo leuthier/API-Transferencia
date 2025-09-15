@@ -2,20 +2,20 @@ const request = require('supertest');
 const { expect } = require('chai');
 const { validate: isUuid } = require('uuid');
 require('dotenv').config();
-let token;
-
-beforeEach(async () => {
-     // 1 - Capturar token
-    const res = await request(process.env.BASE_URL_REST)
-        .post('/auth/login')
-        .send({
-            email: "string",
-            password: "string"
-        });
-    token = res.body.token;
-});
 
 describe('Transfer - External', () => {
+    let token;
+    beforeEach(async () => {
+        // 1 - Capturar token
+        const res = await request(process.env.BASE_URL_REST)
+            .post('/auth/login')
+            .send({
+                email: "string",
+                password: "string"
+            });
+        token = res.body.token;
+    });
+
     describe('POST /transfers', () => {
         it('Quando informo destinatario inexistente recebo 400', async () => {
             // 2 - Usar token na requisição de transferência
