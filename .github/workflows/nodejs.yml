@@ -26,10 +26,10 @@ jobs:
       run: npm run test-rest-controller
 
     - name: Start REST API server
-      run: npm start-rest &
+      run: npm run start-rest &
 
     - name: Start Graphql API server
-      run: npm start-graphql &
+      run: npm run start-graphql &
 
     - name: Wait for servers to be ready
       run: sleep 7
