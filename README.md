@@ -1,5 +1,5 @@
 
-[![Node.js CI](https://github.com/leuthier/API-Transferencia/actions/workflows/nodejs.yml/badge.svg)](https://github.com/leuthier/API-Transferencia/actions/workflows/nodejs.yml)
+[![Node.js CI](https://github.com/leuthier/API-Transferencia/actions/workflows/tests.yml/badge.svg)](https://github.com/leuthier/API-Transferencia/actions/workflows/tests.yml)
 
 # API Testes - Express & GraphQL
 
@@ -15,9 +15,13 @@ API de exemplo para aprendizado de testes e automação (Mocha, Supertest, Graph
    ```sh
    npm install
    ```
+2. Copie o arquivo de variáveis de ambiente:
+   ```sh
+   cp env_example .env
+   ```
+   Edite o arquivo `.env` conforme desejar.
 
 ## Uso
-
 
 - Iniciar servidor REST:
   ```sh

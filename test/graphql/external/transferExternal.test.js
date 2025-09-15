@@ -1,6 +1,7 @@
 const request = require('supertest');
 const { expect } = require('chai');
 const app = require('../../../graphql/app');
+require('dotenv').config();
 
 const chai = require('chai');
 const chaiExclude = require('chai-exclude');
@@ -14,7 +15,7 @@ describe('Transfer - External GraphQL', () => {
   
   before(async () => { 
     const loginUser = require('../fixture/request/login/loginUser.json');
-    const resposta = await request(app)
+    const resposta = await request(process.env.BASE_URL_GRAPHQL)
       .post('/graphql')
       .send(loginUser);
 
@@ -28,7 +29,7 @@ describe('Transfer - External GraphQL', () => {
     describe('Mutation Transfer', function () {
         it('Transferência realizada sucesso', async function () {
             const expectedResponse = require('../fixture/response/transfer/transferSuccess.json');
-            const res = await request(app)
+            const res = await request(process.env.BASE_URL_GRAPHQL)
             .post('/graphql')
             .set('Authorization', `Bearer ${token}`)
             .send(transferRequest);
@@ -45,7 +46,7 @@ describe('Transfer - External GraphQL', () => {
 
         it('Conta sem saldo disponível para transferência', async function () {  
           transferRequest.variables.amount = 101;
-          const res = await request(app)
+          const res = await request(process.env.BASE_URL_GRAPHQL)
             .post('/graphql')
             .set('Authorization', `Bearer ${token}`)
             .send(transferRequest);
@@ -54,7 +55,7 @@ describe('Transfer - External GraphQL', () => {
         });
 
         it('Token de autenticação não informado', async function () {
-            const res = await request(app)
+            const res = await request(process.env.BASE_URL_GRAPHQL)
             .post('/graphql')
             .send(transferRequest);
             expect(res.body.data.transfer).to.be.null;
@@ -63,7 +64,7 @@ describe('Transfer - External GraphQL', () => {
 
         it('Token de autenticação expirado', async function () {
             const invalidToken = require('../fixture/request/auth/expiredToken.json');
-            const res = await request(app)
+            const res = await request(process.env.BASE_URL_GRAPHQL)
             .post('/graphql')
             .set('Authorization', `Bearer ${invalidToken}`)
             .send(transferRequest);

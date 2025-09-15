@@ -34,6 +34,12 @@ jobs:
     - name: Wait for servers to be ready
       run: sleep 7
 
+    - name: Create .env file
+      run: |
+        echo "BASE_URL_REST=${{ secrets.BASE_URL_REST }}" >> .env
+        echo "BASE_URL_GRAPHQL=${{ secrets.BASE_URL_GRAPHQL }}" >> .env
+        echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+
     - name: Run REST API External tests
       run: npm run test-rest-external
     
