@@ -47,6 +47,9 @@ jobs:
     
     - name: Run Graphql API External tests
       run: npm run test-graphql-external
+
+    - name: Run all tests
+      run: npm test
     
     - name: Zip Mochawesome report
       run: zip -r mochawesome-report.zip mochawesome-report/
