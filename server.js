@@ -1,6 +1,6 @@
 const app = require('./app');
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.BASE_PORT_REST || 3000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`REST server running at http://localhost:${PORT}`);
 });

@@ -19,6 +19,14 @@ jobs:
       with:
         node-version: '20.x'
 
+    - name: Create .env file
+      run: |
+        echo "BASE_URL_REST=${{ secrets.BASE_URL_REST }}" >> .env
+        echo "BASE_PORT_REST=${{ secrets.BASE_PORT_REST }}" >> .env
+        echo "BASE_URL_GRAPHQL=${{ secrets.BASE_URL_GRAPHQL }}" >> .env
+        echo "BASE_PORT_GRAPHQL=${{ secrets.BASE_PORT_GRAPHQL }}" >> .env
+        echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+
     - name: Install dependencies
       run: npm install
 
@@ -39,3 +47,15 @@ jobs:
     
     - name: Run Graphql API External tests
       run: npm run test-graphql-external
+
+    - name: Run all tests
+      run: npm test
+    
+    - name: Zip Mochawesome report
+      run: zip -r mochawesome-report.zip mochawesome-report/
+
+    - name: Upload zipped Mochawesome report artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: mochawesome-report-archive
+        path: mochawesome-report.zip

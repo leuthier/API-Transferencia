@@ -3,9 +3,9 @@ const request = require('supertest');
 const sinon = require('sinon');
 const { expect } = require('chai');
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 const transferService = require('../../../src/services/transferService');
 const app = require('../../../app');
-const { create } = require('../../../src/models/userModel');
 
 describe('Transfer Controller - Mock - Fixture', () => {
     beforeEach(() => {
@@ -33,8 +33,7 @@ describe('Transfer Controller - Mock - Fixture', () => {
 
     describe('POST /transfers', () => {
         it('Quando informo valores válidos eu tenho sucesso com 201', async () => {
-            // Gera token JWT válido
-            const secret = process.env.JWT_SECRET || 'top-secret';
+            const secret = process.env.JWT_SECRET;
 
             const mockUser = { id: 'user-id', email: 'string', name: 'User Name' };
             const token = jwt.sign(mockUser, secret, { expiresIn: '1h' });

@@ -1,25 +1,25 @@
 const request = require('supertest');
 const { expect } = require('chai');
 const { validate: isUuid } = require('uuid');
-const API = 'http://localhost:3000';
-let token;
-
-beforeEach(async () => {
-     // 1 - Capturar token
-    const res = await request(API)
-        .post('/auth/login')
-        .send({
-            email: "string",
-            password: "string"
-        });
-    token = res.body.token;
-});
+require('dotenv').config();
 
 describe('Transfer - External', () => {
+    let token;
+    beforeEach(async () => {
+        // 1 - Capturar token
+        const res = await request(process.env.BASE_URL_REST)
+            .post('/auth/login')
+            .send({
+                email: "string",
+                password: "string"
+            });
+        token = res.body.token;
+    });
+
     describe('POST /transfers', () => {
         it('Quando informo destinatario inexistente recebo 400', async () => {
             // 2 - Usar token na requisição de transferência
-            const resposta = await request(API)
+            const resposta = await request(process.env.BASE_URL_REST)
                 .post('/transfers')
                 .set('Authorization', `Bearer ${token}`)
                 .send({
@@ -32,7 +32,7 @@ describe('Transfer - External', () => {
         });
     
         it('Quando informo mesmo id remetente e destinatario recebo 400', async () => {
-            const resposta = await request(API)
+            const resposta = await request(process.env.BASE_URL_REST)
                 .post('/transfers')
                 .set('Authorization', `Bearer ${token}`)
                 .send({
@@ -45,7 +45,7 @@ describe('Transfer - External', () => {
         });
 
         it('Quando informo usuários existentes e valor positivo eu tenho sucesso com 201', async () => {
-            const resposta = await request(API)
+            const resposta = await request(process.env.BASE_URL_REST)
                 .post('/transfers')
                 .set('Authorization', `Bearer ${token}`)
                 .send({
@@ -68,7 +68,7 @@ describe('Transfer - External', () => {
         });
 
         it('Quando informo valor negativo para transferir recebo 400', async () => {
-            const resposta = await request(API)
+            const resposta = await request(process.env.BASE_URL_REST)
                 .post('/transfers')
                 .set('Authorization', `Bearer ${token}`)
                 .send({
@@ -81,7 +81,7 @@ describe('Transfer - External', () => {
         });
 
         it('Quando tento transferir valores de uma conta que não é a minha recebo 403', async () => {
-            const resposta = await request(API)
+            const resposta = await request(process.env.BASE_URL_REST)
                 .post('/transfers')
                 .set('Authorization', `Bearer ${token}`)
                 .send({
