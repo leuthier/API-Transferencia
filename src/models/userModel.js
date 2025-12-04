@@ -29,7 +29,7 @@ const users = [
     "favored": [
       "andre@gmail.com"
     ],
-    "balance": 100
+    "balance": 1000
   },
   {
   "id": "7c320a7c-10ea-456d-b8ab-4b95fee51602",
