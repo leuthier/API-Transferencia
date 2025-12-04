@@ -2,7 +2,7 @@
     "query": "mutation Transfer($fromEmail: String!, $toEmail: String!, $amount: Float!) { transfer(fromEmail: $fromEmail, toEmail: $toEmail, amount: $amount) { id from { id email } to { id email } amount createdAt } }",
     "variables": {
         "fromEmail": "string",
-        "toEmail": "victor@leuth.com",
+        "toEmail": "andre@gmail.com",
         "amount": 10
     }
 }
