@@ -46,7 +46,7 @@ describe('Transfer - External GraphQL', () => {
         });
 
         it('Conta sem saldo disponível para transferência', async function () {  
-          transferRequest.variables.amount = 101;
+          transferRequest.variables.amount = 10001;
           const res = await request(process.env.BASE_URL_GRAPHQL)
             .post('/graphql')
             .set('Authorization', `Bearer ${token}`)
