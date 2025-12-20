@@ -25,8 +25,89 @@
           }
         },
         "responses": {
-          "200": { "description": "Login bem-sucedido. Retorna o token JWT." },
-          "400": { "description": "Credenciais inválidas ou dados ausentes." }
+          "200": {
+            "description": "Login realizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "description": "JWT de autenticação",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid",
+                          "example": "8536109d-5824-41b9-97b6-3c0f381d6f80"
+                        },
+                        "email": {
+                          "type": "string",
+                          "format": "email",
+                          "example": "victor@leuth.com"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "victor"
+                        },
+                        "favored": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "format": "email"
+                          },
+                          "example": [
+                            "andre@gmail.com",
+                            "string"
+                          ]
+                        },
+                        "balance": {
+                          "type": "number",
+                          "example": 1234567890
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Email e senha são obrigatórios"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Credenciais inválidas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Credenciais inválidas"
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     },

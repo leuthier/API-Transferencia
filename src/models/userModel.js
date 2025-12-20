@@ -11,15 +11,15 @@ const users = [
     "hashedPassword": "$2b$08$iYUnNHCQCKFcURxtFQH4SeOoBHNgvSBUWFBY7n6xcRMibHiNithxS"
   },
   {
-    "id": "84e47cef-4783-4398-9d72-6eed9d67bf8e",
-    "name": "victor",
-    "email": "victor@leuth.com",
-    "favored": [
-      "andre@gmail.com",
-      "string",
-    ],
-    "balance": 1234567890,
-    "hashedPassword": "$2a$10$7QJfXG9c1r0n0mZ6p8uXUu5c8HfQOeG5bFz1Z5eFz1Z5eFz1Z5eFz1"
+  "id": "8536109d-5824-41b9-97b6-3c0f381d6f80",
+  "name": "victor",
+  "email": "victor@leuth.com",
+  "hashedPassword": "$2b$08$KjUZYaWtDQ2XCKSYQBU8suYP.ltnOjcYex5X8MtP2WiGbhDfecy8K",
+  "favored": [
+    "andre@gmail.com",
+    "string"
+  ],
+  "balance": 1234567890
   },
   {
     "id": "b81a5ae0-32fc-43b0-8f33-dbe419cd6033",

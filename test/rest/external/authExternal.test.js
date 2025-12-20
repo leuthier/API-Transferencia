@@ -23,7 +23,7 @@ describe('Auth - External', () => {
                     email: "invalid@gmail.com",
                     password: "1234"
                 });
-            expect(resposta.status).to.equal(400);
+            expect(resposta.status).to.equal(401);
             expect(resposta.body.error).to.equal('Credenciais inválidas');
         });
 
@@ -34,7 +34,7 @@ describe('Auth - External', () => {
                     email: "string",
                     password: "wrongpassword"
                 });
-            expect(resposta.status).to.equal(400);
+            expect(resposta.status).to.equal(401);
             expect(resposta.body.error).to.equal('Credenciais inválidas');  
         });
 
