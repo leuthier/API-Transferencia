@@ -3,8 +3,9 @@ import { sleep, check, group } from 'k6';
 
 // k6 does not support importing JSON modules directly. Use open() and JSON.parse()
 // Paths are relative to this script file.
-const user_string = JSON.parse(open('../fixture/request/loginUsuarioString.json'));
-const user_transfer = JSON.parse(open('../fixture/request/transferirDeStringParaAndre.json'));
+const users = JSON.parse(open('./data/login.test.data.json'));
+const user_string = users[0];
+const user_transfer = JSON.parse(open('./data/transferFromStringToAndre.test.data.json'));
 
 export const options = {
   vus: 10,
@@ -19,7 +20,7 @@ const BASE_URL = 'http://localhost:3000';
 
 export default function() {
 let responseLoginUser = ''
-  group('Fazendo login', function() {
+  group('Login', function() {
     responseLoginUser = http.post(
       `${BASE_URL}/auth/login`, 
       JSON.stringify({
@@ -31,13 +32,13 @@ let responseLoginUser = ''
               'Content-Type': 'application/json'
           },
     });
-    //console.log('Login Body: ' + responseLoginUser.body);
+    // console.log('Login Body: ' + responseLoginUser.body);
     check(responseLoginUser, {
-      'Login bem sucedido! Status deve ser 200': (res) => res.status === 200
+      'Login done! Status should 200': (res) => res.status === 200
     });
   })
 
-  group('Fazendo transferencia', function() {
+  group('Transfering', function() {
     const responseTransfer = http.post(
       `${BASE_URL}/transfers`, 
       JSON.stringify({
@@ -54,14 +55,14 @@ let responseLoginUser = ''
 
       //console.log('Transfer Body: ' + responseTransfer.body);
       check(responseTransfer, {
-        'Transferencia criada com sucesso! Status deve ser 201': (res) => res.status === 201
+        'Transfer done! Status should be ser 201': (res) => res.status === 201
       });
   })
 
   // cmd - npm run start-rest
-  // cmd - k6 run test/rest/k6/desafio2.js
+  // cmd - k6 run test/k6/desafio2.k6test.js
   // gitbash
-  // K6_WEB_DASHBOARD=true K6_WEB_DASHBOARD_OPEN=true K6_WEB_DASHBOARD_EXPORT=test/rest/k6/reports/dashboard-report.html K6_WEB_DASHBOARD_PERIOD=2s k6 run test/rest/k6/desafio2.js
+  // K6_WEB_DASHBOARD=true K6_WEB_DASHBOARD_OPEN=true K6_WEB_DASHBOARD_EXPORT=test/k6/reports/desafio2-html-report.html K6_WEB_DASHBOARD_PERIOD=2s k6 run test/k6/desafio2.k6test.js
   
   
   sleep(1);

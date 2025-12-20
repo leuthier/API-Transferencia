@@ -1,0 +1,14 @@
+[
+    {
+        "email": "string",
+        "password": "string"
+    },
+    {
+        "email": "string32",
+        "password": "string32"
+    },
+    {
+        "email": "victor@leuth.com",
+        "password": "victor"
+    }
+]
