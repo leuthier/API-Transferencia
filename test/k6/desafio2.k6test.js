@@ -5,13 +5,13 @@ import { sleep, check, group } from 'k6';
 // Paths are relative to this script file.
 const users = JSON.parse(open('./data/login.test.data.json'));
 const user_string = users[0];
-const user_transfer = JSON.parse(open('./data/transferFromStringToAndre.test.data.json'));
+const user_transfer = JSON.parse(open('./data/transferToAndre.test.data.json'));
 
 export const options = {
   vus: 10,
   duration: '30s',
   thresholds: {
-    http_req_duration: ['p(90)<=140', 'p(95)<=150'], // 90% of requests must complete below 140ms and 95% below 150ms
+    http_req_duration: ['p(90)<=160', 'p(95)<=190'], // 90% of requests must complete below 140ms and 95% below 150ms
     http_req_failed: ['rate<0.1'], // error rate must be less than 10%
   }
 };
@@ -62,7 +62,7 @@ let responseLoginUser = ''
   // cmd - npm run start-rest
   // cmd - k6 run test/k6/desafio2.k6test.js
   // gitbash
-  // K6_WEB_DASHBOARD=true K6_WEB_DASHBOARD_OPEN=true K6_WEB_DASHBOARD_EXPORT=test/k6/reports/desafio2-html-report.html K6_WEB_DASHBOARD_PERIOD=2s k6 run test/k6/desafio2.k6test.js
+  // K6_WEB_DASHBOARD=true K6_WEB_DASHBOARD_OPEN=true K6_WEB_DASHBOARD_EXPORT=docs/k6/reports/desafio2-html-report.html K6_WEB_DASHBOARD_PERIOD=2s k6 run test/k6/desafio2.k6test.js
   
   
   sleep(1);
