@@ -9,7 +9,9 @@
     "test-rest-controller": "mocha test/rest/controller/*.test.js --reporter-options reportDir=mochawesome-report/rest-controller,reportFilename=report --timeout 10000 --reporter mochawesome",
     "test-graphql-external": "mocha test/graphql/external/*.test.js --reporter-options reportDir=mochawesome-report/graphql-external,reportFilename=report --timeout 10000 --reporter mochawesome",
     "start-rest": "node server.js",
-    "start-graphql": "node graphql/server.js"
+    "start-graphql": "node graphql/server.js",
+    "k6-desafio2": "K6_WEB_DASHBOARD=true K6_WEB_DASHBOARD_OPEN=true K6_WEB_DASHBOARD_EXPORT=test/k6/reports/desafio2-html-report.html K6_WEB_DASHBOARD_PERIOD=2s k6 run test/k6/desafio2.k6test.js",
+    "k6-finalwork": "K6_WEB_DASHBOARD=true K6_WEB_DASHBOARD_OPEN=true K6_WEB_DASHBOARD_EXPORT=test/k6/reports/finalWork-html-report.html K6_WEB_DASHBOARD_PERIOD=2s k6 run test/k6/finalWork.k6test.js"
   },
   "keywords": [],
   "author": "",

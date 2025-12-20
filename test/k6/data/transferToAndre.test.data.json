@@ -1,5 +1,4 @@
 {
-  "fromEmail": "string",
   "toEmail": "andre@gmail.com",
   "amount": 1
 }
