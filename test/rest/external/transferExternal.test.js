@@ -63,7 +63,7 @@ describe('Transfer - External', () => {
             expect(dateObject.toISOString()).to.equal(createdAt);
             expect(resposta.body.from).to.have.property('id', 'b81a5ae0-32fc-43b0-8f33-dbe419cd6033');
             expect(resposta.body.from).to.have.property('email', 'string');
-            expect(resposta.body.to).to.have.property('id', '84e47cef-4783-4398-9d72-6eed9d67bf8e');
+            expect(resposta.body.to).to.have.property('id', '8536109d-5824-41b9-97b6-3c0f381d6f80');
             expect(resposta.body.to).to.have.property('email', 'victor@leuth.com');
         });
 

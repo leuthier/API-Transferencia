@@ -53,7 +53,7 @@ function authenticate({ email, password }){
   const user = users.findByEmail(email);
   if(!user || !bcrypt.compareSync(password, user.hashedPassword)) {
     const err = new Error('Credenciais inválidas');
-    err.status = 400;
+    err.status = 401;
     throw err;
   }
 
